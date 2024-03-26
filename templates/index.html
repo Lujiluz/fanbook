@@ -83,14 +83,26 @@
       $('document').ready(function () {
         $.ajax({
           type: 'GET',
-          url: '/get',
+          url: '/msg',
           data: {},
           success: function (res) {
-            alert(res.msg);
+            res.data.map((item) => {
+              let temp_html = `
+          <div class="card">
+              <div class="card-body">
+            <h5 class="card-title">${item.comment}</h5>
+            <p class="card-text">- ${item.nickname}</p>
+            <button onclick="handle_delete_btn(${item.num})" type="button" class="btn btn-outline-danger">Delete</button>
+          </div>
+          </div>       
+              `;
+              $('#cards').append(temp_html);
+            });
           },
         });
       });
 
+      //this one is for button handler
       const handle_input_btn = () => {
         let nickname = $('#nickname').val();
         let msg = $('#message').val();
@@ -113,6 +125,19 @@
             $('#cards').append(temp_html);
             $('#nickname').val('');
             $('#message').val('');
+            alert(res.msg);
+            window.location.reload();
+          },
+        });
+      };
+
+      //handle delete button
+      const handle_delete_btn = (num) => {
+        $.ajax({
+          type: 'DELETE',
+          url: '/msg',
+          data: { num },
+          success: function (res) {
             alert(res.msg);
             window.location.reload();
           },
