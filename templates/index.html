@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>Dune Fanbook | Bootstrap Practice</title>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .header {
+        width: 100%;
+        height: 300px;
+        color: white;
+        background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://deadline.com/wp-content/uploads/2024/01/MCDDUPA_WB041-e1708041579639.jpg?w=800);
+        background-size: contain;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .header > h1 > a:hover {
+        text-decoration: none;
+        color: #f49307;
+        transition: 200ms;
+      }
+      .header > h1 > a {
+        text-decoration: none;
+        color: white;
+      }
+
+      .header > p {
+        padding-top: 20px;
+        font-style: italic;
+        font-weight: light;
+        font-size: small;
+      }
+
+      .myForm {
+        width: 95%;
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        box-shadow: 0px 0px 3px 0px grey;
+      }
+
+      .myForm > button {
+        margin-top: 20px;
+        border: none;
+      }
+
+      .myForm > button:hover {
+        margin-top: 20px;
+        background-color: #dd8812;
+        border: none;
+      }
+
+      .cards {
+        width: 95%;
+        max-width: 500px;
+        margin: 20px auto;
+      }
+
+      .cards .card {
+        margin-top: 10px;
+      }
+    </style>
+
+    <script>
+      $('document').ready(function () {
+        $.ajax({
+          type: 'GET',
+          url: '/get',
+          data: {},
+          success: function (res) {
+            alert(res.msg);
+          },
+        });
+      });
+
+      const handle_input_btn = () => {
+        let nickname = $('#nickname').val();
+        let msg = $('#message').val();
+        if (nickname === '' || msg === '') return alert('Please complete the form!');
+
+        //buat send POST request
+        $.ajax({
+          type: 'POST',
+          url: '/msg',
+          data: { nickname, msg },
+          success: function (res) {
+            let temp_html = `
+        <div class="card">
+            <div class="card-body">
+          <h5 class="card-title">${msg}</h5>
+          <p class="card-text">- ${nickname}</p>
+        </div>
+        </div>       
+            `;
+            $('#cards').append(temp_html);
+            $('#nickname').val('');
+            $('#message').val('');
+            alert(res.msg);
+            window.location.reload();
+          },
+        });
+      };
+    </script>
+  </head>
+
+  <body>
+    <!-- start header -->
+    <div class="header">
+      <h1><a href="https://www.youtube.com/watch?v=0UtYt6Vg2nY" target="_blank">Dune</a> Fan Book</h1>
+      <small>a Film by Dennis Villeneuve</small>
+    </div>
+    <!-- end header -->
+
+    <!-- start form -->
+    <div class="myForm">
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="nickname" placeholder="nickname" />
+        <label for="floatingInput">Nickname</label>
+      </div>
+      <div class="form-floating">
+        <textarea class="form-control" placeholder="Fan Message" id="message" style="height: 100px"></textarea>
+        <label for="floatingTextarea2">Fan Message</label>
+      </div>
+      <button type="button" class="btn btn-dark" onclick="handle_input_btn()">Leave a comment</button>
+    </div>
+    <!-- end form -->
+
+    <!-- start cards -->
+    <div class="cards" id="cards"></div>
+    <!-- end cards -->
+  </body>
+</html>
